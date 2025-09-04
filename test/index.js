@@ -1851,7 +1851,7 @@ test('content', async function (t) {
   )
 })
 
-test('micromark-extension-directive options', async function (t) {
+test('micromark-extension-directive options', function (t) {
   const sample =
     'Text directive :mark[Hello World]\n\n' +
     ':::section\n' +
