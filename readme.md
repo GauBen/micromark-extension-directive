@@ -20,7 +20,7 @@ such).
 * [API](#api)
   * [`directive(options?)`](#directiveoptions)
   * [`directiveHtml(options?)`](#directivehtmloptions)
-  * [`Directive`](#directive-1)
+  * [`Directive`](#directive)
   * [`Handle`](#handle)
   * [`Options`](#options)
   * [`HtmlOptions`](#htmloptions)
@@ -134,7 +134,9 @@ function abbr(d) {
 <p>A lovely language know as <abbr title="HyperText Markup Language">HTML</abbr>.</p>
 ```
 
-You can also pass options to `directive()` to disable the processing of certain types of directives. Disabled directives will be considered plaintext and will not be processed.
+You can also pass options to `directive()` to disable the processing of
+certain types of directives.
+Disabled directives will be considered plaintext and will not be processed.
 
 For example, to disable text directives:
 
@@ -423,13 +425,13 @@ or community you agree to abide by its terms.
 
 [api-directive-html]: #directivehtmloptions
 
-[api-directive-type]: #directive-1
+[api-directive-type]: #directive
 
 [api-handle]: #handle
 
-[api-options]: #options
-
 [api-html-options]: #htmloptions
+
+[api-options]: #options
 
 [author]: https://wooorm.com
 
