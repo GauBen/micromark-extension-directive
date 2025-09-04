@@ -1851,7 +1851,7 @@ test('content', async function (t) {
   )
 })
 
-test('micromark-extension-directive options', function (t) {
+test('micromark-extension-directive options', async function (t) {
   const sample =
     'Text directive :mark[Hello World]\n\n' +
     ':::section\n' +
@@ -1860,7 +1860,7 @@ test('micromark-extension-directive options', function (t) {
     'And that was a leaf directive!\n' +
     ':::\n'
 
-  t.test('should disable text directives when configured', function () {
+  await t.test('should disable text directives when configured', function () {
     assert.equal(
       micromark(sample, options({'*': h}, {disableTextDirective: true})),
       '<p>Text directive :mark[Hello World]</p>\n' +
@@ -1872,7 +1872,7 @@ test('micromark-extension-directive options', function (t) {
     )
   })
 
-  t.test('should disable leaf directives when configured', function () {
+  await t.test('should disable leaf directives when configured', function () {
     assert.equal(
       micromark(sample, options({'*': h}, {disableLeafDirective: true})),
       '<p>Text directive <mark>Hello World</mark></p>\n' +
@@ -1884,19 +1884,22 @@ test('micromark-extension-directive options', function (t) {
     )
   })
 
-  t.test('should disable container directives when configured', function () {
-    assert.equal(
-      micromark(sample, options({'*': h}, {disableContainerDirective: true})),
-      '<p>Text directive <mark>Hello World</mark></p>\n' +
-        '<p>:::section\n' +
-        'Container directive</p>\n' +
-        '<hr>\n' +
-        '<p>And that was a leaf directive!\n' +
-        ':::</p>\n'
-    )
-  })
+  await t.test(
+    'should disable container directives when configured',
+    function () {
+      assert.equal(
+        micromark(sample, options({'*': h}, {disableContainerDirective: true})),
+        '<p>Text directive <mark>Hello World</mark></p>\n' +
+          '<p>:::section\n' +
+          'Container directive</p>\n' +
+          '<hr>\n' +
+          '<p>And that was a leaf directive!\n' +
+          ':::</p>\n'
+      )
+    }
+  )
 
-  t.test(
+  await t.test(
     'should disable everything when configured (sanity check)',
     function () {
       assert.equal(
