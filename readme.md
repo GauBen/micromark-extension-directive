@@ -150,7 +150,7 @@ micromark('Open localhost:8080', {
 // Returns: <p>Open localhost:8080</p>
 ```
 
-This way `:text` won't be processed as a directive.
+This way all `:something` tokens will be ignored during parsing.
 
 ## API
 
