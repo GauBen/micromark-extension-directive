@@ -1,6 +1,7 @@
 /**
  * @import {Handle, HtmlOptions} from 'micromark-extension-directive'
  * @import {CompileContext} from 'micromark-util-types'
+ * @import {Options} from 'micromark-extension-directive'
  */
 
 import assert from 'node:assert/strict'
@@ -1850,6 +1851,77 @@ test('content', async function (t) {
   )
 })
 
+test('micromark-extension-directive options', async function (t) {
+  const sample =
+    'Text directive :mark[Hello World]\n\n' +
+    ':::section\n' +
+    'Container directive\n' +
+    '::hr\n' +
+    'And that was a leaf directive!\n' +
+    ':::\n'
+
+  t.test('should disable text directives when configured', function () {
+    assert.equal(
+      micromark(sample, options({'*': h}, {disableTextDirective: true})),
+      '<p>Text directive :mark[Hello World]</p>\n' +
+        '<section>\n' +
+        '<p>Container directive</p>\n' +
+        '<hr>\n' +
+        '<p>And that was a leaf directive!</p>\n' +
+        '</section>\n'
+    )
+  })
+
+  t.test('should disable leaf directives when configured', function () {
+    assert.equal(
+      micromark(sample, options({'*': h}, {disableLeafDirective: true})),
+      '<p>Text directive <mark>Hello World</mark></p>\n' +
+        '<section>\n' +
+        '<p>Container directive\n' +
+        '::hr\n' +
+        'And that was a leaf directive!</p>\n' +
+        '</section>\n'
+    )
+  })
+
+  t.test('should disable container directives when configured', function () {
+    assert.equal(
+      micromark(sample, options({'*': h}, {disableContainerDirective: true})),
+      '<p>Text directive <mark>Hello World</mark></p>\n' +
+        '<p>:::section\n' +
+        'Container directive</p>\n' +
+        '<hr>\n' +
+        '<p>And that was a leaf directive!\n' +
+        ':::</p>\n'
+    )
+  })
+
+  t.test(
+    'should disable everything when configured (sanity check)',
+    function () {
+      assert.equal(
+        micromark(
+          sample,
+          options(
+            {'*': h},
+            {
+              disableContainerDirective: true,
+              disableLeafDirective: true,
+              disableTextDirective: true
+            }
+          )
+        ),
+        '<p>Text directive :mark[Hello World]</p>\n' +
+          '<p>:::section\n' +
+          'Container directive\n' +
+          '::hr\n' +
+          'And that was a leaf directive!\n' +
+          ':::</p>\n'
+      )
+    }
+  )
+})
+
 /**
  * @this {CompileContext}
  * @type {Handle}
@@ -1944,11 +2016,13 @@ function h(d) {
 /**
  * @param {HtmlOptions | null | undefined} [options={}]
  *   HTML configuration (default: `{}`).
+ * @param {Options} [directiveOptions={}]
+ *   Direction configuration (default: `{}`).
  */
-function options(options) {
+function options(options, directiveOptions) {
   return {
     allowDangerousHtml: true,
-    extensions: [directive()],
+    extensions: [directive(directiveOptions)],
     htmlExtensions: [directiveHtml(options)]
   }
 }

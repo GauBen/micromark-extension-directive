@@ -3,6 +3,16 @@ import type {CompileContext} from 'micromark-util-types'
 export {directive} from './lib/syntax.js'
 export {directiveHtml} from './lib/html.js'
 
+/** Configuration object accepted by `directive()`. */
+export interface Options {
+  /** Disable container directives. */
+  disableContainerDirective?: boolean
+  /** Disable leaf directives. */
+  disableLeafDirective?: boolean
+  /** Disable text directives. */
+  disableTextDirective?: boolean
+}
+
 /**
  * Internal tuple representing an attribute.
  */
