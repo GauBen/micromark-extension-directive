@@ -18,10 +18,11 @@ such).
 * [Install](#install)
 * [Use](#use)
 * [API](#api)
-  * [`directive()`](#directive)
+  * [`directive(options?)`](#directiveoptions)
   * [`directiveHtml(options?)`](#directivehtmloptions)
   * [`Directive`](#directive-1)
   * [`Handle`](#handle)
+  * [`Options`](#options)
   * [`HtmlOptions`](#htmloptions)
 * [Authoring](#authoring)
 * [HTML](#html)
@@ -133,6 +134,24 @@ function abbr(d) {
 <p>A lovely language know as <abbr title="HyperText Markup Language">HTML</abbr>.</p>
 ```
 
+You can also pass options to `directive()` to disable the processing of certain types of directives. Disabled directives will be considered plaintext and will not be processed.
+
+For example, to disable text directives:
+
+```js
+import {micromark} from 'micromark'
+import {directive, directiveHtml} from 'micromark-extension-directive'
+
+// Only process container and leaf directives, disable text directives
+micromark('Open localhost:8080', {
+  extensions: [directive({disableTextDirective: true})],
+  htmlExtensions: [directiveHtml()]
+})
+// Returns: <p>Open localhost:8080</p>
+```
+
+This way `:text` won't be processed as a directive.
+
 ## API
 
 This package exports the identifiers [`directive`][api-directive] and
@@ -141,6 +160,7 @@ There is no default export.
 It exports the [TypeScript][] types
 [`Directive`][api-directive-type],
 [`Handle`][api-handle],
+[`Options`][api-options],
 and [`HtmlOptions`][api-html-options].
 
 The export map supports the [`development` condition][development].
@@ -148,9 +168,15 @@ Run `node --conditions development module.js` to get instrumented dev code.
 Without this condition,
 production code is loaded.
 
-### `directive()`
+### `directive(options?)`
 
 Create an extension for `micromark` to enable directive syntax.
+
+###### Parameters
+
+* `options`
+  ([`Options`][api-options], optional)
+  — configuration
 
 ###### Returns
 
@@ -216,6 +242,22 @@ Handle a directive (TypeScript type).
 Signal whether the directive was handled
 (`boolean`, default: `true`).
 Yield `false` to let the fallback (a special handle for `'*'`) handle it.
+
+### `Options`
+
+Configuration for the directive syntax extension (TypeScript type).
+
+###### Fields
+
+* `disableContainerDirective`
+  (`boolean`, default: `false`)
+  — turn off container directives (fenced with `:::`)
+* `disableLeafDirective`
+  (`boolean`, default: `false`)
+  — turn off leaf directives (fenced with `::`)
+* `disableTextDirective`
+  (`boolean`, default: `false`)
+  — turn off text directives (fenced with `:`)
 
 ### `HtmlOptions`
 
@@ -377,13 +419,15 @@ or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[api-directive]: #directive
+[api-directive]: #directiveoptions
 
 [api-directive-html]: #directivehtmloptions
 
 [api-directive-type]: #directive-1
 
 [api-handle]: #handle
+
+[api-options]: #options
 
 [api-html-options]: #htmloptions
 
